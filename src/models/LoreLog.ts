@@ -11,7 +11,7 @@ export interface LoreLogDocument extends Document {
 const loreLogSchema = new Schema<LoreLogDocument>(
   {
     message: { type: String, required: true },
-    severity: { type: String, enum: ["info", "anomaly", "breach", "cataclysm"], default: "info" },
+    severity: { type: String, enum: ["info", "anomaly", "breach", "cataclysm", "#mirchi"], default: "info" },
     source: { type: String, default: "unknown" },
   },
   {
