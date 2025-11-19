@@ -1,0 +1,88 @@
+.form {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  background: var(--bg-panel);
+  box-shadow: var(--shadow-sm);
+
+  h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 0 0 1.5rem;
+  }
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  input,
+  textarea,
+  select {
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    background: var(--bg-base);
+    color: var(--text-primary);
+    padding: 0.625rem 0.875rem;
+    font-size: 0.875rem;
+    transition: all var(--transition);
+
+    &:focus {
+      outline: none;
+      border-color: var(--border-dark);
+    }
+  }
+
+  textarea {
+    font-family: inherit;
+    resize: vertical;
+  }
+
+  button {
+    border-radius: var(--radius-md);
+    border: 1px solid var(--text-primary);
+    background: var(--text-primary);
+    color: var(--bg-base);
+    padding: 0.75rem;
+    font-weight: 500;
+    font-size: 0.9375rem;
+    cursor: pointer;
+    transition: all var(--transition);
+    margin-top: 1rem;
+
+    &:hover:not(:disabled) {
+      opacity: 0.9;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.fullWidth {
+  grid-column: 1 / -1;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.fullWidth {
+  margin-bottom: 1rem;
+}
+

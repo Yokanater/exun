@@ -1,0 +1,16 @@
+.calculator {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  h1 {
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    color: var(--text-secondary);
+    font-size: 1.0625rem;
+    line-height: 1.7;
+  }
+}
+

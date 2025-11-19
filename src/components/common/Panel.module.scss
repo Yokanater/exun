@@ -1,0 +1,25 @@
+@use "@/styles/mixins" as *;
+
+.panel {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  background: var(--bg-panel);
+  transition: all var(--transition);
+  
+  &:hover {
+    border-color: var(--border-dark);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+.header {
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+  color: var(--text-secondary);
+}
+
+

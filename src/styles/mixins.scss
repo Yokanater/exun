@@ -1,0 +1,23 @@
+@use "sass:color";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:string";
+
+@mixin clean-border($color: var(--border)) {
+  border: 1px solid $color;
+  transition: border-color var(--transition);
+  
+  &:hover {
+    border-color: var(--border-dark);
+  }
+}
+
+@mixin card-shadow {
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition);
+  
+  &:hover {
+    box-shadow: var(--shadow-md);
+  }
+}
+

@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## MicroSilk Exchange
 
-## Getting Started
+> *A dystopian, entirely fictional dark-web tableau where the renegade etinuxE faction auctions “biounits” born from Dr. Tai Ni’s shrink experiments. Nothing here is real advice—it is world-building only.*
 
-First, run the development server:
+### Tech Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Next.js 15** (App Router) running on **Bun**
+- **TypeScript** + **SCSS modules** (no CSS frameworks)
+- **MongoDB** via **Mongoose**
+- **JWT** auth with client context providers
+
+### Core Features
+
+1. **Biounit Trade Platform** – marketplace grid with search, tier/status filters, and admin moderation controls.
+2. **Biounit Database** – admin dashboard with analytics, CRUD form, and lore log viewer.
+3. **µWorth Calculator** – cyberpunk slider interface that produces fictional µCredit valuations with glitchy lore hints.
+
+Public pages include Home, Marketplace, Calculator, Documentation, About. Authenticated users gain Dashboard access, while admins unlock the Admin Control Deck for data operations.
+
+### Environment
+
+Create a `.env.local` (or similar) with:
+
+```
+MONGODB_URI=mongodb+srv://...
+JWT_SECRET=super-secret
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Scripts (Bun)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+bun dev      # start Next.js in development mode
+bun build    # production build
+bun start    # serve the built app
+bun lint     # run eslint
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### API Surface
 
-## Learn More
+| Route | Methods | Description |
+| --- | --- | --- |
+| `/api/auth/register` | `POST` | Create operative/admin accounts (fictional). |
+| `/api/auth/login` | `POST` | Issue JWT cookie. |
+| `/api/auth/logout` | `POST` | Clear session cookie. |
+| `/api/auth/me` | `GET` | Return current session payload. |
+| `/api/biounits` | `GET`, `POST*` | Query listings; create requires admin. |
+| `/api/biounits/[id]` | `PATCH*`, `DELETE*` | Update or purge a biounit (admin only). |
+| `/api/logs` | `GET`, `POST*` | Read or append lore logs. |
 
-To learn more about Next.js, take a look at the following resources:
+`*` requires an admin JWT cookie.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Data Models
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **User** – `username`, `password`, `role` (`operative` | `admin`).
+- **Biounit** – bioId, shrink phase, nano vital metrics, containment tier, µCredit pricing, lore log, status.
+- **LoreLog** – message, severity (`info`, `anomaly`, `breach`, `cataclysm`), source.
 
-## Deploy on Vercel
+### Usage Notes
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- The UI, copy, and data are **explicitly fictional** and exist solely for sci-fi storytelling.
+- Admin dashboards include seeding logic so first launch showcases example biounits and logs.
+- SCSS mixins/panels drive the neon black-market aesthetic—extend through `src/styles/mixins.scss` if you need more effects.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Enjoy exploring the myth of the MicroSilk Exchange.
