@@ -13,19 +13,9 @@ export const fetchLoreLogs = async (limit = 12): Promise<LoreLogEntry[]> => {
   if (count === 0) {
     await LoreLogModel.insertMany([
       {
-        message: "Shrink Phase 4 triggered micro-neural glassing inside cell Theta.",
-        severity: "anomaly",
-        source: "vault.theta",
-      },
-      {
-        message: "Catacomb humidity doubled µWorth projections by 12%.",
-        severity: "info",
-        source: "market.daemon",
-      },
-      {
-        message: "Biohazard SILK-C42 attempted to re-grow full-scale heart.",
-        severity: "breach",
-        source: "containment.delta",
+        message: "Mirchi to lagegi",
+        severity: "#mirchi",
+        source: "espice",
       },
     ]);
   }

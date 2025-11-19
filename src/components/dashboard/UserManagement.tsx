@@ -195,6 +195,7 @@ export const UserManagement = () => {
               {editingUserId !== user._id && (
                 <>
                   <button
+                  className={styles.editBtn}
                     onClick={() => {
                       setEditingUserId(user._id);
                       setEditBalance(String(user.balance));
