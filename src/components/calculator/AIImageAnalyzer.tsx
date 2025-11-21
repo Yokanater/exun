@@ -5,10 +5,19 @@ import { calculateMuWorth } from "@/lib/calculator";
 import { CreateHumanModal } from "./CreateHumanModal";
 import styles from "./AIImageAnalyzer.module.scss";
 
+interface AnalysisResult {
+  age: number;
+  heightCm: number;
+  weightKg: number;
+  athleticRating: number;
+  organQualityScore: number;
+  immuneSystemStrength: number;
+}
+
 export const AIImageAnalyzer = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [analysis, setAnalysis] = useState<any>(null);
+  const [analysis, setAnalysis] = useState<AnalysisResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);

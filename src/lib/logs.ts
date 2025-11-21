@@ -33,7 +33,7 @@ export const logAction = async (params: {
   userId: string;
   action: string;
   targetId?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }) => {
   try {
     await connectDb();

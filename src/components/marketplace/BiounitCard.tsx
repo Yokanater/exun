@@ -14,9 +14,8 @@ interface Props {
 export const BiounitCard = ({ unit, onRefresh }: Props) => {
   const { user, refreshSession } = useAuth();
   const [loading, setLoading] = useState(false);
-  const organs = unit.availableOrgans ?? [];
 
-  const imageUrl = (unit as any).generatedImageUrl || 
+  const imageUrl = (unit as BiounitAttributes & { generatedImageUrl?: string }).generatedImageUrl || 
     `https://api.dicebear.com/7.x/personas/svg?seed=${unit.bioId}&backgroundColor=b6e3f4,c0aede,d1d4f9`;
 
   const finalPrice = Math.round(unit.basePrice * unit.priceModifier);

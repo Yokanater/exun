@@ -3,8 +3,7 @@
 import { useState } from "react";
 import { Modal } from "@/components/common/Modal";
 import { ORGAN_LABELS } from "@/types/organ";
-import { getExtractableOrgans, type ExtractableOrgan } from "@/lib/organExtraction";
-import type { BiounitAttributes } from "@/types/biounit";
+import { getExtractableOrgans } from "@/lib/organExtraction";
 import type { BiounitRecord } from "@/lib/biounits";
 import styles from "./OrganHarvestModal.module.scss";
 

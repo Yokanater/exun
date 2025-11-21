@@ -3,14 +3,15 @@ import { connectDb } from '@/lib/db';
 import { BiounitModel } from '@/models/Biounit';
 import { OrganModel } from '@/models/Organ';
 import { getExtractableOrgans } from '@/lib/organExtraction';
-import { OrganType } from '@/types/organ';
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDb();
+    
+    const { id } = await params;
 
     const { organTypes } = await request.json();
 
@@ -21,7 +22,7 @@ export async function POST(
       );
     }
 
-    const subject = await BiounitModel.findOne({ bioId: params.id });
+    const subject = await BiounitModel.findOne({ bioId: id });
     if (!subject) {
       return NextResponse.json(
         { error: 'Subject not found' },

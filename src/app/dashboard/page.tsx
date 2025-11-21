@@ -3,13 +3,22 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Panel } from "@/components/common/Panel";
+import type { BiounitRecord } from "@/lib/biounits";
+import type { OrganAttributes } from "@/types/organ";
 import styles from "./dashboard.module.scss";
+
+interface User {
+  id: string;
+  username: string;
+  role: string;
+  balance: number;
+}
 
 export default function DashboardPage() {
   const router = useRouter();
-  const [user, setUser] = useState<any>(null);
-  const [ownedUnits, setOwnedUnits] = useState<any[]>([]);
-  const [ownedOrgans, setOwnedOrgans] = useState<any[]>([]);
+  const [user, setUser] = useState<User | null>(null);
+  const [ownedUnits, setOwnedUnits] = useState<BiounitRecord[]>([]);
+  const [ownedOrgans, setOwnedOrgans] = useState<OrganAttributes[]>([]);
   const [loading, setLoading] = useState(true);
   const [sellingId, setSellingId] = useState<string | null>(null);
   const [sellingOrganId, setSellingOrganId] = useState<string | null>(null);
@@ -27,14 +36,14 @@ export default function DashboardPage() {
       const unitsRes = await fetch("/api/biounits");
       const unitsData = await unitsRes.json();
       const units = Array.isArray(unitsData.biounits) ? unitsData.biounits : [];
-      setOwnedUnits(units.filter((unit: any) => unit.ownerId === userData.user.id));
+      setOwnedUnits(units.filter((unit: BiounitRecord) => unit.ownerId === userData.user.id));
 
       const organsRes = await fetch("/api/organs");
       if (organsRes.ok) {
         const organsData = await organsRes.json();
         const organs = Array.isArray(organsData.organs) ? organsData.organs : [];
         const userId = userData.user.id.toString();
-        const userOrgans = organs.filter((organ: any) => organ.ownerId?.toString() === userId);
+        const userOrgans = organs.filter((organ: OrganAttributes) => organ.ownerId?.toString() === userId);
         console.log("User ID:", userId);
         console.log("All organs:", organs.length);
         console.log("User organs:", userOrgans.length);
@@ -160,7 +169,7 @@ export default function DashboardPage() {
         <div className={styles.ownedGrid}>
           {ownedUnits.map((unit) => {
             const fallbackAvatarUrl = `https://api.dicebear.com/7.x/personas/svg?seed=${unit.bioId}&backgroundColor=b6e3f4,c0aede,d1d4f9`;
-            const avatarUrl = unit.generatedImageUrl || fallbackAvatarUrl;
+            const avatarUrl = (unit as BiounitRecord & { generatedImageUrl?: string }).generatedImageUrl || fallbackAvatarUrl;
             const finalPrice = Math.round(unit.basePrice * unit.priceModifier);
             const sellPrice = Math.floor(finalPrice * 0.8);
             const isSelling = sellingId === unit._id;

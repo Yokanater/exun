@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const { age, heightCm, weightKg, athleticRating, organQualityScore, immuneSystemStrength, notes } = await req.json();
+    const { age, heightCm, weightKg, athleticRating, organQualityScore, notes } = await req.json();
 
     const bmi = weightKg / Math.pow(heightCm / 100, 2);
     let bodyType = "average build";

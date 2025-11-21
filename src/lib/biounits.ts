@@ -1,7 +1,6 @@
 import { nanoid } from "nanoid";
 import { connectDb } from "@/lib/db";
 import { BiounitModel } from "@/models/Biounit";
-import { SEED_BIOUNITS } from "@/data/seedBiounits";
 import type { AnalyticsSummary, BiounitAttributes, SubjectCondition } from "@/types/biounit";
 
 export type BiounitRecord = Omit<BiounitAttributes, "createdAt" | "updatedAt"> & {

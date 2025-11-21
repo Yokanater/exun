@@ -3,9 +3,10 @@
 import { useState, useMemo } from "react";
 import { OrganCard } from "./OrganCard";
 import styles from "./OrganMarketplace.module.scss";
+import type { OrganAttributes } from "@/types/organ";
 
 interface OrganMarketplaceProps {
-  organs: any[];
+  organs: OrganAttributes[];
   userId?: string;
   userBalance?: number;
   userRole?: string | null;

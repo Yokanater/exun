@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import type { BiounitAttributes, HealthStatus } from "@/types/biounit";
+import type { HealthStatus } from "@/types/biounit";
 import type { BiounitRecord } from "@/lib/biounits";
 import { OrganHarvestModal } from "@/components/dashboard/OrganHarvestModal";
 import styles from "./AdminBiounitTable.module.scss";
