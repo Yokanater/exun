@@ -28,3 +28,26 @@ export const fetchLoreLogs = async (limit = 12): Promise<LoreLogEntry[]> => {
     createdAt: doc.createdAt,
   }));
 };
+
+export const logAction = async (params: {
+  userId: string;
+  action: string;
+  targetId?: string;
+  metadata?: Record<string, any>;
+}) => {
+  try {
+    await connectDb();
+    const { userId, action, targetId, metadata } = params;
+    
+    const message = `User ${userId} performed ${action}${targetId ? ` on ${targetId}` : ''}`;
+    
+    await LoreLogModel.create({
+      message,
+      severity: "#action",
+      source: "system",
+      metadata: metadata || {},
+    });
+  } catch (error) {
+    console.error("Failed to log action:", error);
+  }
+};

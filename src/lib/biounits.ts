@@ -2,7 +2,7 @@ import { nanoid } from "nanoid";
 import { connectDb } from "@/lib/db";
 import { BiounitModel } from "@/models/Biounit";
 import { SEED_BIOUNITS } from "@/data/seedBiounits";
-import type { AnalyticsSummary, BiounitAttributes } from "@/types/biounit";
+import type { AnalyticsSummary, BiounitAttributes, SubjectCondition } from "@/types/biounit";
 
 export type BiounitRecord = Omit<BiounitAttributes, "createdAt" | "updatedAt"> & {
   _id: string;
@@ -12,15 +12,6 @@ export type BiounitRecord = Omit<BiounitAttributes, "createdAt" | "updatedAt"> &
 
 export const ensureSeedBiounits = async () => {
   await connectDb();
-  const existing = await BiounitModel.countDocuments();
-  if (existing > 0) return;
-
-  await BiounitModel.insertMany(
-    SEED_BIOUNITS.map((entry) => ({
-      ...entry,
-      uniqueId: nanoid(10),
-    }))
-  );
 };
 
 export const fetchBiounits = async (query: Record<string, unknown> = {}): Promise<BiounitRecord[]> => {
@@ -50,29 +41,32 @@ export const buildAnalytics = async (): Promise<AnalyticsSummary> => {
   await ensureSeedBiounits();
   const docs = await BiounitModel.find();
   const total = docs.length;
-  const unstableCount = docs.filter((doc) => doc.status === "unstable").length;
-  const hazardousCount = docs.filter((doc) => doc.status === "biohazard").length;
-  const averageNanoVitalScore = docs.reduce((acc, doc) => acc + doc.nanoVitalScore, 0) / Math.max(total, 1);
+  const healthyCount = docs.filter((doc) => doc.healthStatus === "healthy").length;
+  const criticalCount = docs.filter((doc) => doc.healthStatus === "unhealthy" || doc.healthStatus === "deceased").length;
+  const averageAthleticRating = docs.reduce((acc, doc) => acc + doc.athleticRating, 0) / Math.max(total, 1);
 
-  const containmentSpread = docs.reduce(
+  const conditionSpread = docs.reduce(
     (acc, doc) => {
-      acc[doc.containmentTier] = (acc[doc.containmentTier] ?? 0) + 1;
+      acc[doc.overallCondition] = (acc[doc.overallCondition] ?? 0) + 1;
       return acc;
     },
-    { alpha: 0, beta: 0, gamma: 0, delta: 0, omega: 0 } as AnalyticsSummary["containmentSpread"]
+    { excellent: 0, good: 0, fair: 0, poor: 0, critical: 0 } as Record<string, number>
   );
 
   const revenueProjection = docs.reduce(
-    (acc, doc) => acc + doc.priceMuCredits * (doc.status === "stable" ? 1 : 0.72),
+    (acc, doc) => {
+      const finalPrice = Math.round(doc.basePrice * doc.priceModifier);
+      return acc + finalPrice * (doc.healthStatus === "healthy" ? 1 : doc.healthStatus === "moderate" ? 0.7 : 0.4);
+    },
     0
   );
 
   return {
     totalBiounits: total,
-    unstableCount,
-    hazardousCount,
-    averageNanoVitalScore: Math.round(averageNanoVitalScore),
-    containmentSpread,
+    healthyCount,
+    criticalCount,
+    averageAthleticRating: Math.round(averageAthleticRating),
+    conditionSpread: conditionSpread as Record<SubjectCondition, number>,
     revenueProjection: Math.round(revenueProjection),
   };
 };

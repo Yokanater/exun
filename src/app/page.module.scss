@@ -1,26 +1,74 @@
 @use "@/styles/mixins" as *;
 
 .hero {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 4rem;
-  padding: 3rem 0;
-
-  @media (min-width: 768px) {
-    grid-template-columns: 1.2fr 1fr;
-    gap: 3rem;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 3.5rem 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
 }
 
 .copy {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  text-align: center;
   gap: 1.5rem;
+  max-width: 600px;
 
   p {
     color: var(--text-secondary);
     font-size: 1.125rem;
     line-height: 1.7;
+    max-width: 46ch;
+  }
+}
+
+.logoContainer {
+  margin-bottom: 1rem;
+  height: 123px; // Match the SVG viewBox height ratio
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  @media (max-width: 768px) {
+    height: 82px; // Proportional to 200px width
+  }
+}
+
+.logo {
+  width: 300px;
+  height: auto;
+  display: block;
+  
+  @media (max-width: 768px) {
+    width: 200px;
+  }
+}
+
+.logoPath {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: drawPath 2.5s ease-in-out forwards;
+  
+  &:nth-child(1) {
+    animation-delay: 0s;
+  }
+  
+  &:nth-child(2) {
+    animation-delay: 0.3s;
+  }
+  
+  &:nth-child(3) {
+    animation-delay: 0.6s;
+  }
+}
+
+@keyframes drawPath {
+  to {
+    stroke-dashoffset: 0;
   }
 }
 
@@ -29,27 +77,6 @@
   gap: 1rem;
   flex-wrap: wrap;
   margin-top: 0.5rem;
-}
-
-.telemetry {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-}
-
-.metricLabel {
-  display: block;
-  font-size: 0.875rem;
-  color: var(--text-tertiary);
-  font-weight: 500;
-  margin-bottom: 0.5rem;
-}
-
-.metricValue {
-  display: block;
-  font-size: 2.5rem;
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  margin-bottom: 0.25rem;
+  justify-content: center;
 }
 

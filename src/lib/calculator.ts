@@ -2,8 +2,9 @@ export interface WorthFactors {
   height: number; // in cm
   weight: number; 
   age: number; // in years
-  fitnessLevel: number; // 0-100
-  healthScore: number; 
+  athleticRating: number; // 0-100
+  organQualityScore: number; // 0-100
+  immuneSystemStrength: number; // 0-100
 }
 
 const clamp = (value: number, min = 0, max = 100) => Math.max(min, Math.min(max, value));
@@ -12,36 +13,51 @@ export const calculateMuWorth = ({
   height,
   weight,
   age,
-  fitnessLevel,
-  healthScore,
+  athleticRating,
+  organQualityScore,
+  immuneSystemStrength,
 }: WorthFactors) => {
-
-  const normalizedHeight = clamp((height - 120) / (220 - 120)) || 0.5;
-  const normalizedFitness = clamp(fitnessLevel) / 100;
-  const normalizedHealth = clamp(healthScore) / 100;
-
-  const bmi = weight / Math.pow(height / 100, 2);
-  const bmiFactor = 1 - Math.abs(bmi - 22) / 20;
-  const normalizedBMI = clamp(bmiFactor);
-
-
-  const ageFactor = age < 25 ? (age - 18) / 7 : age > 35 ? Math.max(0, 1 - (age - 35) / 45) : 1;
+  const basePrice = 50000;
   
-
-
-  const baseWorth = 50_000 * normalizedHeight * normalizedBMI;
-  const healthBonus = baseWorth * (0.4 * normalizedHealth);
-  const fitnessBonus = baseWorth * (0.3 * normalizedFitness);
-  const ageMultiplier = 1 + (ageFactor * 0.3);
-
-  const finalWorth = (baseWorth + healthBonus + fitnessBonus) * ageMultiplier;
-  return Math.max(10_000, Math.round(finalWorth));
+  const heightFactor = clamp((height - 150) / 50, 0, 1);
+  
+  const bmi = weight / Math.pow(height / 100, 2);
+  const optimalBMI = 22;
+  const bmiFactor = Math.max(0, 1 - Math.abs(bmi - optimalBMI) / 10);
+  
+  let ageFactor = 1.0;
+  if (age < 20) {
+    ageFactor = 0.7 + (age - 18) * 0.05;
+  } else if (age > 35) {
+    ageFactor = Math.max(0.4, 1 - (age - 35) * 0.015);
+  }
+  
+  const athleticBonus = 1 + (athleticRating / 100) * 0.4;
+  
+  const organQualityMultiplier = 0.7 + (organQualityScore / 100) * 0.6;
+  
+  const immuneBonus = 1 + (immuneSystemStrength / 100) * 0.2;
+  
+  let finalPrice = basePrice;
+  finalPrice *= (0.8 + heightFactor * 0.4);
+  finalPrice *= (0.8 + bmiFactor * 0.4);
+  finalPrice *= ageFactor;
+  finalPrice *= athleticBonus;
+  finalPrice *= organQualityMultiplier;
+  finalPrice *= immuneBonus;
+  
+  const overallHealth = (athleticRating + organQualityScore + immuneSystemStrength) / 3;
+  const healthModifier = 0.9 + (overallHealth / 100) * 0.4;
+  finalPrice *= healthModifier;
+  
+  return Math.max(15000, Math.round(finalPrice));
 };
 
 export const estimateDescriptions = [
-  "Did you know brushing your teach increases worth?",
-  "Estimate includes fitness and age considerations",
-  "Eat less and be worth more",
-  "15K+ Trophies on clash royale will get you extra worth",
-  "Valuation considers overall wellness indicators",
+  "Valuation based on physical attributes and health metrics",
+  "Premium pricing for subjects with high athletic ratings",
+  "Organ quality significantly impacts market value",
+  "Optimal age range (20-35) maximizes worth",
+  "Strong immune system increases desirability",
+  "BMI optimization enhances overall valuation",
 ];

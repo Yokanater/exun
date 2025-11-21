@@ -1,46 +1,48 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import type { BiounitAttributes, ContainmentTier } from "@/types/biounit";
+import type { BiounitAttributes } from "@/types/biounit";
 import { BiounitCard } from "@/components/marketplace/BiounitCard";
 import styles from "./MarketplaceGrid.module.scss";
 
-const statusFilters: Array<{ value: BiounitAttributes["status"] | "all"; label: string }> = [
-  { value: "all", label: "All" },
-  { value: "stable", label: "Stable" },
-  { value: "unstable", label: "Unstable" },
-  { value: "observation", label: "Observation" },
-  { value: "biohazard", label: "Biohazard" },
-  { value: "contained", label: "Contained" },
+const statusFilters: Array<{ value: string | "all"; label: string }> = [
+  { value: "all", label: "All Health Status" },
+  { value: "healthy", label: "Healthy" },
+  { value: "moderate", label: "Moderate" },
+  { value: "unhealthy", label: "Unhealthy" },
+  { value: "deceased", label: "Deceased" },
 ];
 
-const containmentFilters: Array<{ value: ContainmentTier | "all"; label: string }> = [
-  { value: "all", label: "Any Tier" },
-  { value: "alpha", label: "Alpha" },
-  { value: "beta", label: "Beta" },
-  { value: "gamma", label: "Gamma" },
-  { value: "delta", label: "Delta" },
-  { value: "omega", label: "Omega" },
+const bloodTypeFilters: Array<{ value: string | "all"; label: string }> = [
+  { value: "all", label: "All Blood Types" },
+  { value: "O-", label: "O- (Universal)" },
+  { value: "O+", label: "O+" },
+  { value: "A-", label: "A-" },
+  { value: "A+", label: "A+" },
+  { value: "B-", label: "B-" },
+  { value: "B+", label: "B+" },
+  { value: "AB-", label: "AB-" },
+  { value: "AB+", label: "AB+" },
 ];
 
 export const MarketplaceGrid = () => {
   const [biounits, setBiounits] = useState<(BiounitAttributes & { _id: string })[]>([]);
   const [statusFilter, setStatusFilter] = useState<(typeof statusFilters)[number]["value"]>("all");
-  const [tierFilter, setTierFilter] = useState<(typeof containmentFilters)[number]["value"]>("all");
+  const [bloodTypeFilter, setBloodTypeFilter] = useState<(typeof bloodTypeFilters)[number]["value"]>("all");
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
 
   const fetchUnits = useCallback(async () => {
     setLoading(true);
     const params = new URLSearchParams();
-    if (statusFilter !== "all") params.set("status", statusFilter);
-    if (tierFilter !== "all") params.set("tier", tierFilter);
+    if (statusFilter !== "all") params.set("healthStatus", statusFilter);
+    if (bloodTypeFilter !== "all") params.set("bloodType", bloodTypeFilter);
     if (search) params.set("search", search);
     const response = await fetch(`/api/biounits?${params.toString()}`);
     const payload = await response.json();
     setBiounits(payload.biounits ?? []);
     setLoading(false);
-  }, [search, statusFilter, tierFilter]);
+  }, [search, statusFilter, bloodTypeFilter]);
 
   useEffect(() => {
     fetchUnits();
@@ -50,7 +52,7 @@ export const MarketplaceGrid = () => {
     <div className={styles.wrapper}>
       <div className={styles.filters}>
         <input
-          placeholder="Search Bio-ID"
+          placeholder="Search by Bio-ID..."
           value={search}
           onChange={(event) => setSearch(event.target.value)}
           onBlur={fetchUnits}
@@ -62,19 +64,21 @@ export const MarketplaceGrid = () => {
             </option>
           ))}
         </select>
-        <select value={tierFilter} onChange={(event) => setTierFilter(event.target.value as typeof tierFilter)}>
-          {containmentFilters.map((option) => (
+        <select value={bloodTypeFilter} onChange={(event) => setBloodTypeFilter(event.target.value as typeof bloodTypeFilter)}>
+          {bloodTypeFilters.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
             </option>
           ))}
         </select>
         <button type="button" onClick={fetchUnits} disabled={loading}>
-          {loading ? "Loading" : "Crazy Feed"}
+          {loading ? "Loading..." : "Refresh"}
         </button>
       </div>
       {loading ? (
-        <p className={styles.loading}>Finding yum humans…</p>
+        <p className={styles.loading}>Loading inventory...</p>
+      ) : biounits.length === 0 ? (
+        <p className={styles.loading}>No subjects available</p>
       ) : (
         <div className={styles.grid}>
           {biounits.map((unit) => (

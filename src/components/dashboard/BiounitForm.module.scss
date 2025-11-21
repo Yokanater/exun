@@ -1,13 +1,14 @@
 .form {
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 1.5rem;
-  background: var(--bg-panel);
-  box-shadow: var(--shadow-sm);
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
 
   h3 {
-    font-size: 1.125rem;
-    font-weight: 600;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--accent-highlight);
     margin: 0 0 1.5rem;
   }
 
@@ -15,25 +16,37 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    font-size: 0.875rem;
-    font-weight: 500;
+    font-size: 0.75rem;
+    font-weight: 600;
     color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
   }
 
   input,
   textarea,
   select {
-    border-radius: var(--radius-md);
+    border-radius: 0;
     border: 1px solid var(--border);
-    background: var(--bg-base);
+    background: var(--bg-panel);
     color: var(--text-primary);
-    padding: 0.625rem 0.875rem;
+    padding: 0.6875rem 0.875rem;
     font-size: 0.875rem;
-    transition: all var(--transition);
+    transition: border-color var(--transition), background var(--transition);
 
     &:focus {
       outline: none;
-      border-color: var(--border-dark);
+      border-color: var(--accent-highlight);
+      background: var(--bg-base);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      background: #2a2a2a;
+      color: #fafafa;
+
+      &:focus {
+        background: #1a1a1a;
+      }
     }
   }
 
@@ -43,23 +56,26 @@
   }
 
   button {
-    border-radius: var(--radius-md);
+    border-radius: 0;
     border: 1px solid var(--text-primary);
     background: var(--text-primary);
     color: var(--bg-base);
-    padding: 0.75rem;
-    font-weight: 500;
-    font-size: 0.9375rem;
+    padding: 0.85rem 1.5rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.08em;
     cursor: pointer;
     transition: all var(--transition);
-    margin-top: 1rem;
+    margin-top: 1.5rem;
 
     &:hover:not(:disabled) {
-      opacity: 0.9;
+      background: transparent;
+      color: var(--accent-highlight);
+      border-color: var(--accent-highlight);
     }
 
     &:disabled {
-      opacity: 0.5;
+      opacity: 0.4;
       cursor: not-allowed;
     }
   }
@@ -67,22 +83,13 @@
 
 .formGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1rem;
+  margin-bottom: 1.25rem;
 }
 
 .fullWidth {
   grid-column: 1 / -1;
-}
-
-.formGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.fullWidth {
   margin-bottom: 1rem;
 }
 

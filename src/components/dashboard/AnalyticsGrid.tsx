@@ -12,24 +12,24 @@ export const AnalyticsGrid = ({ data }: Props) => (
       <strong>{data.totalBiounits}</strong>
     </div>
     <div>
-      <span>Unstable</span>
-      <strong>{data.unstableCount}</strong>
+      <span>Healthy</span>
+      <strong>{data.healthyCount}</strong>
     </div>
     <div>
-      <span>High Priority</span>
-      <strong>{data.hazardousCount}</strong>
+      <span>Critical</span>
+      <strong>{data.criticalCount}</strong>
     </div>
     <div>
-      <span>Avg Vitality</span>
-      <strong>{data.averageNanoVitalScore}</strong>
+      <span>Avg Athletic</span>
+      <strong>{data.averageAthleticRating}</strong>
     </div>
     <div>
       <span>Total Value</span>
-      <strong>€{data.revenueProjection.toLocaleString()}</strong>
+      <strong>€{data.revenueProjection.toLocaleString('en-US')}</strong>
     </div>
-    {Object.entries(data.containmentSpread).map(([tier, count]) => (
-      <div key={tier}>
-        <span>Tier {tier.toUpperCase()}</span>
+    {Object.entries(data.conditionSpread).map(([condition, count]) => (
+      <div key={condition}>
+        <span>{condition}</span>
         <strong>{count}</strong>
       </div>
     ))}

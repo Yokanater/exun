@@ -37,7 +37,8 @@ export const AuthForm = ({ mode }: Props) => {
       await refreshSession();
       const resolvedRole = payload?.user?.role ?? role;
       setLoading(false);
-      router.replace(resolvedRole === "admin" ? "/admin" : "/dashboard");
+      router.push(resolvedRole === "admin" ? "/admin" : "/dashboard");
+      router.refresh();
     } catch (err) {
       console.error(err);
       setError("Signal lost in catacomb tunnel");

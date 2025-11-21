@@ -9,8 +9,9 @@ export const WorthCalculator = () => {
     height: 175, 
     weight: 70,
     age: 30, 
-    fitnessLevel: 65,
-    healthScore: 75,
+    athleticRating: 65,
+    organQualityScore: 75,
+    immuneSystemStrength: 70,
   });
 
   const worth = useMemo(() => calculateMuWorth(factors), [factors]);
@@ -21,11 +22,12 @@ export const WorthCalculator = () => {
   };
 
   const factorConfig = {
-    height: { min: 120, max: 220, label: "Height (cm)", unit: "cm" },
-    weight: { min: 40, max: 150, label: "Weight (kg)", unit: "kg" },
-    age: { min: 18, max: 80, label: "Age", unit: "years" },
-    fitnessLevel: { min: 0, max: 100, label: "Fitness Level", unit: "%" },
-    healthScore: { min: 0, max: 100, label: "Health Score", unit: "%" },
+    height: { min: 150, max: 200, label: "Height (cm)", unit: "cm" },
+    weight: { min: 45, max: 120, label: "Weight (kg)", unit: "kg" },
+    age: { min: 18, max: 65, label: "Age", unit: "years" },
+    athleticRating: { min: 0, max: 100, label: "Athletic Rating", unit: "/100" },
+    organQualityScore: { min: 0, max: 100, label: "Organ Quality", unit: "/100" },
+    immuneSystemStrength: { min: 0, max: 100, label: "Immune System", unit: "/100" },
   };
 
   return (
@@ -50,7 +52,7 @@ export const WorthCalculator = () => {
       </div>
       <div className={styles.output}>
         <p>Estimated Value</p>
-        <h2>€{worth.toLocaleString()}</h2>
+        <h2>€{worth.toLocaleString('en-US')}</h2>
         <p className={styles.description}>{description}</p>
       </div>
     </div>

@@ -5,20 +5,20 @@ import styles from "./BiounitForm.module.scss";
 
 const defaultState = {
   bioId: "",
-  shrinkPhase: 3,
-  nanoVitalScore: 60,
-  geneticStabilityIndex: 60,
-  microHealthIndex: 60,
-  containmentTier: "beta",
-  threatEstimate: "moderate",
-  availableOrgans: "Healthy, Athletic, Quick Learner",
-  priceIndex: 1,
-  priceMuCredits: 250_000,
-  organDensityRating: 70,
-  nanoVitalityBand: "volatile",
-  cellStatus: "sealed",
-  status: "stable",
-  loreLog: "",
+  age: 30,
+  heightCm: 170,
+  weightKg: 70,
+  bloodType: "O+",
+  healthStatus: "healthy",
+  mobilityStatus: "mobile",
+  overallCondition: "good",
+  athleticRating: 50,
+  organQualityScore: 50,
+  immuneSystemStrength: 50,
+  availableOrgans: "Liver, Kidneys, Corneas",
+  basePrice: 500_000,
+  priceModifier: 1.0,
+  notes: "",
 };
 
 interface Props {
@@ -36,6 +36,31 @@ export const BiounitForm = ({ onCreated }: Props) => {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setBusy(true);
+    
+    let generatedImageUrl = null;
+    try {
+      const imageResponse = await fetch("/api/generate-human-image", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          age: form.age,
+          heightCm: form.heightCm,
+          weightKg: form.weightKg,
+          athleticRating: form.athleticRating,
+          organQualityScore: form.organQualityScore,
+          immuneSystemStrength: form.immuneSystemStrength,
+          notes: form.notes, // Include notes/lore for image generation
+        }),
+      });
+
+      if (imageResponse.ok) {
+        const imageResult = await imageResponse.json();
+        generatedImageUrl = imageResult.imageUrl;
+      }
+    } catch (error) {
+      console.error("Failed to generate image:", error);
+    }
+    
     try {
       const response = await fetch("/api/biounits", {
         method: "POST",
@@ -46,6 +71,7 @@ export const BiounitForm = ({ onCreated }: Props) => {
             .split(",")
             .map((organ) => organ.trim())
             .filter(Boolean),
+          generatedImageUrl, // Include the generated image
         }),
       });
       if (!response.ok) {
@@ -64,126 +90,143 @@ export const BiounitForm = ({ onCreated }: Props) => {
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
-      <h3>Add New Item</h3>
+      <h3>Add New Subject</h3>
       <div className={styles.formGrid}>
         <label>
-          Item ID
+          Subject ID
           <input value={form.bioId} onChange={(event) => handleChange("bioId", event.target.value)} required />
         </label>
         <label>
-          Price (Exuncoin €)
-          <input
-            type="number"
-            value={form.priceMuCredits}
-            onChange={(event) => handleChange("priceMuCredits", Number(event.target.value))}
-          />
-        </label>
-        <label>
-          Phase
+          Age
           <input
             type="number"
             min={1}
-            max={6}
-            value={form.shrinkPhase}
-            onChange={(event) => handleChange("shrinkPhase", Number(event.target.value))}
+            max={120}
+            value={form.age}
+            onChange={(event) => handleChange("age", Number(event.target.value))}
           />
         </label>
         <label>
-          Vitality Score
+          Height (cm)
+          <input
+            type="number"
+            min={100}
+            max={250}
+            value={form.heightCm}
+            onChange={(event) => handleChange("heightCm", Number(event.target.value))}
+          />
+        </label>
+        <label>
+          Weight (kg)
+          <input
+            type="number"
+            min={30}
+            max={300}
+            value={form.weightKg}
+            onChange={(event) => handleChange("weightKg", Number(event.target.value))}
+          />
+        </label>
+        <label>
+          Blood Type
+          <select value={form.bloodType} onChange={(event) => handleChange("bloodType", event.target.value)}>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+          </select>
+        </label>
+        <label>
+          Health Status
+          <select value={form.healthStatus} onChange={(event) => handleChange("healthStatus", event.target.value)}>
+            <option value="healthy">Healthy</option>
+            <option value="moderate">Moderate</option>
+            <option value="unhealthy">Unhealthy</option>
+            <option value="deceased">Deceased</option>
+          </select>
+        </label>
+        <label>
+          Mobility Status
+          <select value={form.mobilityStatus} onChange={(event) => handleChange("mobilityStatus", event.target.value)}>
+            <option value="mobile">Mobile</option>
+            <option value="limited">Limited</option>
+            <option value="non-mobile">Non-Mobile</option>
+            <option value="sedated">Sedated</option>
+          </select>
+        </label>
+        <label>
+          Overall Condition
+          <select value={form.overallCondition} onChange={(event) => handleChange("overallCondition", event.target.value)}>
+            <option value="excellent">Excellent</option>
+            <option value="good">Good</option>
+            <option value="fair">Fair</option>
+            <option value="poor">Poor</option>
+            <option value="critical">Critical</option>
+          </select>
+        </label>
+        <label>
+          Athletic Rating (0-100)
           <input
             type="number"
             min={0}
             max={100}
-            value={form.nanoVitalScore}
-            onChange={(event) => handleChange("nanoVitalScore", Number(event.target.value))}
+            value={form.athleticRating}
+            onChange={(event) => handleChange("athleticRating", Number(event.target.value))}
           />
         </label>
         <label>
-          Stability Index
+          Organ Quality Score (0-100)
           <input
             type="number"
             min={0}
             max={100}
-            value={form.geneticStabilityIndex}
-            onChange={(event) => handleChange("geneticStabilityIndex", Number(event.target.value))}
+            value={form.organQualityScore}
+            onChange={(event) => handleChange("organQualityScore", Number(event.target.value))}
           />
         </label>
         <label>
-          Health Index
+          Immune System Strength (0-100)
           <input
             type="number"
             min={0}
             max={100}
-            value={form.microHealthIndex}
-            onChange={(event) => handleChange("microHealthIndex", Number(event.target.value))}
+            value={form.immuneSystemStrength}
+            onChange={(event) => handleChange("immuneSystemStrength", Number(event.target.value))}
           />
         </label>
         <label>
-          Density Rating
+          Base Price (Exuncoin €)
           <input
             type="number"
-            min={0}
-            max={100}
-            value={form.organDensityRating}
-            onChange={(event) => handleChange("organDensityRating", Number(event.target.value))}
+            value={form.basePrice}
+            onChange={(event) => handleChange("basePrice", Number(event.target.value))}
           />
         </label>
         <label>
-          Tier
-          <select value={form.containmentTier} onChange={(event) => handleChange("containmentTier", event.target.value)}>
-            <option value="alpha">Alpha</option>
-            <option value="beta">Beta</option>
-            <option value="gamma">Gamma</option>
-            <option value="delta">Delta</option>
-            <option value="omega">Omega</option>
-          </select>
-        </label>
-        <label>
-          Priority Level
-          <select value={form.threatEstimate} onChange={(event) => handleChange("threatEstimate", event.target.value)}>
-            <option value="minor">Low</option>
-            <option value="moderate">Medium</option>
-            <option value="severe">High</option>
-            <option value="cataclysmic">Critical</option>
-          </select>
-        </label>
-        <label>
-          Storage Status
-          <select value={form.cellStatus} onChange={(event) => handleChange("cellStatus", event.target.value)}>
-            <option value="sealed">Sealed</option>
-            <option value="breached">Breached</option>
-            <option value="frozen">Frozen</option>
-          </select>
-        </label>
-        <label>
-          Vitality Band
-          <select value={form.nanoVitalityBand} onChange={(event) => handleChange("nanoVitalityBand", event.target.value)}>
-            <option value="frail">Frail</option>
-            <option value="volatile">Volatile</option>
-            <option value="surging">Surging</option>
-          </select>
-        </label>
-        <label>
-          Status
-          <select value={form.status} onChange={(event) => handleChange("status", event.target.value)}>
-            <option value="stable">Stable</option>
-            <option value="unstable">Unstable</option>
-            <option value="observation">Observation</option>
-            <option value="biohazard">Biohazard</option>
-            <option value="contained">Contained</option>
-          </select>
+          Price Modifier
+          <input
+            type="number"
+            step={0.1}
+            min={0.1}
+            max={5}
+            value={form.priceModifier}
+            onChange={(event) => handleChange("priceModifier", Number(event.target.value))}
+          />
         </label>
       </div>
       <label className={styles.fullWidth}>
-        Traits (comma separated, e.g., "Healthy, Athletic, Public Speaker")
+        Available Organs (comma separated, e.g., "Heart, Liver, Kidneys")
         <input value={form.availableOrgans} onChange={(event) => handleChange("availableOrgans", event.target.value)} />
       </label>
       <label className={styles.fullWidth}>
-        Description
-        <textarea value={form.loreLog} onChange={(event) => handleChange("loreLog", event.target.value)} rows={3} />
+        Notes
+        <textarea value={form.notes} onChange={(event) => handleChange("notes", event.target.value)} rows={3} />
       </label>
       <button type="submit" disabled={busy}>
-        {busy ? "Creating..." : "Create Item"}
+        {busy ? "Creating & Generating Image..." : "Create Subject"}
       </button>
     </form>
   );

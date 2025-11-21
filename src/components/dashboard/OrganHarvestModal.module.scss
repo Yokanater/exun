@@ -1,0 +1,283 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.subjectInfo {
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  background: var(--bg-panel-strong);
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1rem;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  span {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-tertiary);
+  }
+
+  strong {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+}
+
+.healthy {
+  color: #16a34a !important;
+
+  @media (prefers-color-scheme: dark) {
+    color: #4ade80 !important;
+  }
+}
+
+.moderate {
+  color: #ca8a04 !important;
+
+  @media (prefers-color-scheme: dark) {
+    color: #facc15 !important;
+  }
+}
+
+.unhealthy {
+  color: #ea580c !important;
+
+  @media (prefers-color-scheme: dark) {
+    color: #fb923c !important;
+  }
+}
+
+.deceased {
+  color: #dc2626 !important;
+
+  @media (prefers-color-scheme: dark) {
+    color: #f87171 !important;
+  }
+}
+
+.statusNote {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin: 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.noOrgans {
+  border: 1px solid var(--border);
+  padding: 2.5rem;
+  text-align: center;
+  background: var(--bg-panel);
+
+  p {
+    margin: 0 0 0.5rem;
+    color: var(--text-secondary);
+  }
+
+  .hint {
+    font-size: 0.875rem;
+    color: var(--text-tertiary);
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.selectBtn {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-primary);
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  transition: all var(--transition);
+  border-radius: 0;
+
+  &:hover {
+    border-color: var(--accent-highlight);
+    color: var(--accent-highlight);
+  }
+}
+
+.organList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.organItem {
+  border: 1px solid var(--border);
+  padding: 1rem;
+  background: var(--bg-panel);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  transition: all var(--transition);
+
+  &:hover:not(.disabled) {
+    border-color: var(--border-dark);
+    background: var(--bg-panel-strong);
+  }
+
+  &.selected {
+    border-color: var(--accent-highlight);
+    background: rgba(244, 196, 48, 0.05);
+  }
+
+  &.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background: var(--bg-grid);
+  }
+
+  input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: var(--accent-highlight);
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+}
+
+.organInfo {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.organHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  strong {
+    font-size: 0.9375rem;
+    font-weight: 600;
+  }
+}
+
+.quality {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--border);
+  background: var(--bg-base);
+  color: var(--text-secondary);
+  letter-spacing: 0.05em;
+}
+
+.organPrice {
+  text-align: right;
+}
+
+.price {
+  font-size: 1.125rem;
+  font-weight: 700;
+  font-family: var(--font-display);
+  letter-spacing: 0.05em;
+}
+
+.notViable {
+  font-size: 0.8125rem;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.summary {
+  border: 1px solid var(--border);
+  padding: 1.25rem;
+  background: var(--bg-panel-strong);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  span {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  strong {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+}
+
+.totalPrice {
+  font-size: 1.5rem !important;
+  font-family: var(--font-display);
+  letter-spacing: 0.08em;
+  color: var(--accent-highlight);
+}
+
+.harvestBtn {
+  border: 1px solid var(--text-primary);
+  background: var(--text-primary);
+  color: var(--bg-base);
+  padding: 1rem 2rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: all var(--transition);
+  border-radius: 0;
+  width: 100%;
+
+  &:hover:not(:disabled) {
+    background: transparent;
+    color: var(--accent-highlight);
+    border-color: var(--accent-highlight);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+@media (max-width: 640px) {
+  .infoGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .organInfo {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .organPrice {
+    text-align: left;
+  }
+}

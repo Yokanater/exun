@@ -34,14 +34,16 @@ export async function POST(
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    if (buyer.balance < biounit.priceMuCredits) {
+    const finalPrice = Math.round(biounit.basePrice * biounit.priceModifier);
+
+    if (buyer.balance < finalPrice) {
       return NextResponse.json(
         { error: "Insufficient funds" },
         { status: 400 }
       );
     }
 
-    buyer.balance -= biounit.priceMuCredits;
+    buyer.balance -= finalPrice;
     await buyer.save();
 
     biounit.ownerId = user.id;

@@ -16,11 +16,13 @@ export const BiounitCard = ({ unit, onRefresh }: Props) => {
   const [loading, setLoading] = useState(false);
   const organs = unit.availableOrgans ?? [];
 
-  // crazy avatar for all users
-  const avatarUrl = `https://api.dicebear.com/7.x/personas/svg?seed=${unit.bioId}&backgroundColor=b6e3f4,c0aede,d1d4f9`;
+  const imageUrl = (unit as any).generatedImageUrl || 
+    `https://api.dicebear.com/7.x/personas/svg?seed=${unit.bioId}&backgroundColor=b6e3f4,c0aede,d1d4f9`;
 
+  const finalPrice = Math.round(unit.basePrice * unit.priceModifier);
   const isOwned = unit.ownerId === user?.id;
-  const canAfford = user && (user.balance || 0) >= unit.priceMuCredits;
+  const isAdmin = user?.role === "admin";
+  const canAfford = user && user.role !== "admin" && (user.balance || 0) >= finalPrice;
 
   const handlePurchase = async () => {
     if (!unit._id) return;
@@ -52,7 +54,7 @@ export const BiounitCard = ({ unit, onRefresh }: Props) => {
       });
       if (response.ok) {
         const data = await response.json();
-        alert(`Sold for €${data.soldFor.toLocaleString()}`);
+        alert(`Sold for €${data.soldFor.toLocaleString('en-US')}`);
         await refreshSession();
         onRefresh();
       } else {
@@ -66,68 +68,65 @@ export const BiounitCard = ({ unit, onRefresh }: Props) => {
     setLoading(false);
   };
 
-  const mutateStatus = async (status: BiounitAttributes["status"]) => {
+  const updateHealthStatus = async (healthStatus: BiounitAttributes["healthStatus"]) => {
     if (!unit._id) return;
     setLoading(true);
     await fetch(`/api/biounits/${unit._id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status }),
+      body: JSON.stringify({ healthStatus }),
     });
     setLoading(false);
     onRefresh();
   };
 
-  const containmentBadge = {
-    stable: styles.stable,
-    unstable: styles.unstable,
-    observation: styles.observation,
-    biohazard: styles.biohazard,
-    contained: styles.contained,
-  }[unit.status];
+  const healthBadge = {
+    healthy: styles.healthy,
+    moderate: styles.moderate,
+    unhealthy: styles.unhealthy,
+    deceased: styles.deceased,
+  }[unit.healthStatus];
 
   return (
     <article className={styles.card}>
       <div className={styles.avatarSection}>
-        <img src={avatarUrl} alt={`Profile ${unit.bioId}`} className={styles.avatar} />
-        <span className={clsx(styles.status, containmentBadge)}>{unit.status}</span>
+        <img src={imageUrl} alt={`Profile ${unit.bioId}`} className={styles.avatar} />
+        <span className={clsx(styles.status, healthBadge)}>{unit.healthStatus}</span>
         {isOwned && <span className={styles.ownedBadge}>Owned</span>}
       </div>
       <header className={styles.header}>
         <div>
           <p className="pill">ID: {unit.bioId}</p>
-          <h3>Subject #{unit.shrinkPhase}</h3>
+          <h3>Age {unit.age} • {unit.bloodType}</h3>
         </div>
       </header>
       <section className={styles.metrics}>
         <div>
-          <span>Stability</span>
-          <strong>{unit.geneticStabilityIndex}%</strong>
+          <span>Athletic</span>
+          <strong>{unit.athleticRating}</strong>
         </div>
         <div>
-          <span>Vitality</span>
-          <strong>{unit.nanoVitalScore}</strong>
+          <span>Organ Quality</span>
+          <strong>{unit.organQualityScore}</strong>
         </div>
         <div>
-          <span>Density</span>
-          <strong>{unit.organDensityRating}</strong>
+          <span>Immune</span>
+          <strong>{unit.immuneSystemStrength}</strong>
         </div>
         <div>
           <span>Value</span>
-          <strong>€{unit.priceMuCredits.toLocaleString()}</strong>
+          <strong>€{finalPrice.toLocaleString('en-US')}</strong>
         </div>
       </section>
       <section className={styles.traits}>
-        <span className={styles.traitsLabel}>Traits:</span>
+        <span className={styles.traitsLabel}>Physical:</span>
         <div className={styles.organs}>
-          {organs.map((organ) => (
-            <span key={organ} className={styles.organPill}>
-              {organ}
-            </span>
-          ))}
+          <span className={styles.organPill}>{unit.heightCm}cm</span>
+          <span className={styles.organPill}>{unit.weightKg}kg</span>
+          <span className={styles.organPill}>{unit.mobilityStatus}</span>
         </div>
       </section>
-      <p className={styles.log}>{unit.loreLog}</p>
+      <p className={styles.log}>{unit.notes || unit.overallCondition}</p>
       
  
       {user && user.role !== "admin" && !isOwned && !unit.ownerId && (
@@ -138,7 +137,19 @@ export const BiounitCard = ({ unit, onRefresh }: Props) => {
             onClick={handlePurchase}
             className={styles.purchaseBtn}
           >
-            {loading ? "Processing..." : canAfford ? `Purchase for €${unit.priceMuCredits.toLocaleString()}` : "Insufficient funds"}
+            {loading ? "Processing..." : canAfford ? `Purchase for €${finalPrice.toLocaleString('en-US')}` : "Insufficient funds"}
+          </button>
+        </div>
+      )}
+
+      {isAdmin && !unit.ownerId && (
+        <div className={styles.actions}>
+          <button 
+            type="button" 
+            disabled={true}
+            className={styles.disabledBtn}
+          >
+            Can't Purchase
           </button>
         </div>
       )}
@@ -151,7 +162,7 @@ export const BiounitCard = ({ unit, onRefresh }: Props) => {
             onClick={handleSell}
             className={styles.sellBtn}
           >
-            {loading ? "Processing..." : `Sell for €${Math.floor(unit.priceMuCredits * 0.8).toLocaleString()}`}
+            {loading ? "Processing..." : `Sell for €${Math.floor(finalPrice * 0.8).toLocaleString('en-US')}`}
           </button>
         </div>
       )}
@@ -159,14 +170,14 @@ export const BiounitCard = ({ unit, onRefresh }: Props) => {
 
       {user?.role === "admin" && (
         <div className={styles.actions}>
-          <button type="button" disabled={loading} onClick={() => mutateStatus("unstable")}>
-            Mark Unstable
+          <button type="button" disabled={loading} onClick={() => updateHealthStatus("moderate")}>
+            Mark Moderate
           </button>
-          <button type="button" disabled={loading} onClick={() => mutateStatus("observation")}>
-            Observe
+          <button type="button" disabled={loading} onClick={() => updateHealthStatus("unhealthy")}>
+            Mark Unhealthy
           </button>
-          <button type="button" disabled={loading} onClick={() => mutateStatus("contained")}>
-            Kill
+          <button type="button" disabled={loading} onClick={() => updateHealthStatus("deceased")}>
+            Mark Deceased
           </button>
         </div>
       )}

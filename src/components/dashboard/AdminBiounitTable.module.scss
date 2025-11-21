@@ -1,52 +1,25 @@
 .table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0 0.5rem;
+  border-collapse: collapse;
   font-size: 0.875rem;
+  border: 1px solid var(--border);
 
   th {
     text-align: left;
     font-weight: 600;
     color: var(--text-secondary);
-    padding: 0.75rem 1rem;
-    background: var(--bg-panel);
-    border-top: 1px solid var(--border);
+    padding: 0.9rem 1rem;
+    background: var(--bg-panel-strong);
     border-bottom: 1px solid var(--border);
     text-transform: uppercase;
     font-size: 0.75rem;
     letter-spacing: 0.05em;
   }
 
-  th:first-child {
-    border-left: 1px solid var(--border);
-    border-top-left-radius: var(--radius-md);
-    border-bottom-left-radius: var(--radius-md);
-  }
-
-  th:last-child {
-    border-right: 1px solid var(--border);
-    border-top-right-radius: var(--radius-md);
-    border-bottom-right-radius: var(--radius-md);
-  }
-
   td {
     padding: 1rem;
     background: var(--bg-panel);
-    border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
-  }
-
-  td:first-child {
-    border-left: 1px solid var(--border);
-    border-top-left-radius: var(--radius-md);
-    border-bottom-left-radius: var(--radius-md);
-    font-weight: 500;
-  }
-
-  td:last-child {
-    border-right: 1px solid var(--border);
-    border-top-right-radius: var(--radius-md);
-    border-bottom-right-radius: var(--radius-md);
   }
 
   tbody tr {
@@ -61,7 +34,7 @@
 
   select,
   button {
-    border-radius: var(--radius-md);
+    border-radius: 0;
     border: 1px solid var(--border);
     background: var(--bg-base);
     color: var(--text-primary);
@@ -71,8 +44,8 @@
     transition: all var(--transition);
 
     &:hover:not(:disabled) {
-      border-color: var(--border-dark);
-      background: var(--bg-grid);
+      border-color: var(--accent-highlight);
+      background: #fffef6;
     }
 
     &:disabled {
@@ -81,7 +54,81 @@
     }
   }
 
-  button {
+  select {
+    font-weight: 600;
+    
+    &.healthy {
+      color: #16a34a;
+      border-color: #bbf7d0;
+      
+      @media (prefers-color-scheme: dark) {
+        color: #4ade80;
+        border-color: #166534;
+        background: #1a1a1a;
+      }
+    }
+    
+    &.moderate {
+      color: #ca8a04;
+      border-color: #fde047;
+      
+      @media (prefers-color-scheme: dark) {
+        color: #facc15;
+        border-color: #a16207;
+        background: #1a1a1a;
+      }
+    }
+    
+    &.unhealthy {
+      color: #ea580c;
+      border-color: #fed7aa;
+      
+      @media (prefers-color-scheme: dark) {
+        color: #fb923c;
+        border-color: #7c2d12;
+        background: #1a1a1a;
+      }
+    }
+    
+    &.deceased {
+      color: #dc2626;
+      border-color: #fecaca;
+      
+      @media (prefers-color-scheme: dark) {
+        color: #f87171;
+        border-color: #991b1b;
+        background: #1a1a1a;
+      }
+    }
+  }
+
+  .actionCell {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .killBtn {
+    background: #ea580c !important;
+    color: white !important;
+    border-color: #ea580c !important;
+    font-weight: 600;
+
+    &:hover:not(:disabled) {
+      background: #c2410c !important;
+      border-color: #c2410c !important;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      background: #fb923c !important;
+      border-color: #fb923c !important;
+
+      &:hover:not(:disabled) {
+        background: #fdba74 !important;
+        border-color: #fdba74 !important;
+      }
+    }
+  }  button {
     font-weight: 500;
     color: #dc2626;
     

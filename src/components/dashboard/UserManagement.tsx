@@ -188,7 +188,7 @@ export const UserManagement = () => {
                   <button onClick={() => setEditingUserId(null)}>Cancel</button>
                 </div>
               ) : (
-                <span>€{user.balance?.toLocaleString()}</span>
+                <span>€{user.balance?.toLocaleString('en-US')}</span>
               )}
             </div>
             <div className={styles.actions}>

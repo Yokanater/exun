@@ -1,28 +1,39 @@
 import { Schema, model, models, type Document } from "mongoose";
 import type {
-  BiounitStatus,
-  ContainmentTier,
-  ThreatEstimate,
+  BloodType,
+  HealthStatus,
+  MobilityStatus,
+  SubjectCondition,
 } from "@/types/biounit";
 
 export interface BiounitDocument extends Document {
   bioId: string;
   uniqueId: string;
   ownerId: string | null;
-  shrinkPhase: number;
-  nanoVitalScore: number;
-  geneticStabilityIndex: number;
-  microHealthIndex: number;
-  containmentTier: ContainmentTier;
-  threatEstimate: ThreatEstimate;
+  
+  age: number;
+  heightCm: number;
+  weightKg: number;
+  bloodType: BloodType;
+  
+  healthStatus: HealthStatus;
+  mobilityStatus: MobilityStatus;
+  overallCondition: SubjectCondition;
+  
+  athleticRating: number;
+  organQualityScore: number;
+  immuneSystemStrength: number;
+  
   availableOrgans: string[];
-  priceIndex: number;
-  priceMuCredits: number;
-  organDensityRating: number;
-  nanoVitalityBand: "frail" | "volatile" | "surging";
-  cellStatus: "sealed" | "breached" | "frozen";
-  status: BiounitStatus;
-  loreLog: string;
+  
+  basePrice: number;
+  priceModifier: number;
+  
+  generatedImageUrl?: string;
+  
+  lastCheckup?: Date;
+  notes: string;
+  
   isContained: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -33,41 +44,47 @@ const biounitSchema = new Schema<BiounitDocument>(
     bioId: { type: String, required: true, unique: true },
     uniqueId: { type: String, required: true },
     ownerId: { type: String, default: null },
-    shrinkPhase: { type: Number, required: true },
-    nanoVitalScore: { type: Number, required: true },
-    geneticStabilityIndex: { type: Number, required: true },
-    microHealthIndex: { type: Number, required: true },
-    containmentTier: {
+    
+    age: { type: Number, required: true },
+    heightCm: { type: Number, required: true },
+    weightKg: { type: Number, required: true },
+    bloodType: {
       type: String,
-      enum: ["alpha", "beta", "gamma", "delta", "omega"],
+      enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
       required: true,
     },
-    threatEstimate: {
+    
+    healthStatus: {
       type: String,
-      enum: ["minor", "moderate", "severe", "cataclysmic"],
+      enum: ["healthy", "moderate", "unhealthy", "deceased"],
       required: true,
     },
+    mobilityStatus: {
+      type: String,
+      enum: ["mobile", "limited", "non-mobile", "sedated"],
+      required: true,
+    },
+    overallCondition: {
+      type: String,
+      enum: ["excellent", "good", "fair", "poor", "critical"],
+      required: true,
+    },
+    
+    athleticRating: { type: Number, required: true, min: 0, max: 100 },
+    organQualityScore: { type: Number, required: true, min: 0, max: 100 },
+    immuneSystemStrength: { type: Number, required: true, min: 0, max: 100 },
+    
     availableOrgans: [{ type: String }],
-    priceIndex: { type: Number, required: true },
-    priceMuCredits: { type: Number, required: true },
-    organDensityRating: { type: Number, required: true },
-    nanoVitalityBand: {
-      type: String,
-      enum: ["frail", "volatile", "surging"],
-      required: true,
-    },
-    cellStatus: {
-      type: String,
-      enum: ["sealed", "breached", "frozen"],
-      required: true,
-    },
-    status: {
-      type: String,
-      enum: ["stable", "unstable", "observation", "biohazard", "contained"],
-      default: "stable",
-    },
-    loreLog: { type: String, default: "" },
-    isContained: { type: Boolean, default: false },
+    
+    basePrice: { type: Number, required: true },
+    priceModifier: { type: Number, default: 1.0 },
+    
+    generatedImageUrl: { type: String },
+    
+    lastCheckup: { type: Date },
+    notes: { type: String, default: "" },
+    
+    isContained: { type: Boolean, default: true },
   },
   { timestamps: true }
 );

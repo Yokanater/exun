@@ -34,9 +34,8 @@ export async function POST(
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-
-    const sellPrice = Math.floor(biounit.priceMuCredits * 0.8);
-
+    const finalPrice = Math.round(biounit.basePrice * biounit.priceModifier);
+    const sellPrice = Math.floor(finalPrice * 0.8);
 
     seller.balance += sellPrice;
     await seller.save();
