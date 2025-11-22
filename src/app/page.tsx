@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { GlitchText } from "@/components/common/GlitchText";
+
 import styles from "./page.module.scss";
 
 export default function HomePage() {
