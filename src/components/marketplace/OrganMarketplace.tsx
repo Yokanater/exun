@@ -91,7 +91,7 @@ export const OrganMarketplace = ({ organs, userId, userBalance, userRole }: Orga
           <strong>€{stats.avgPrice.toLocaleString('en-US')}</strong>
         </div>
         <div className={styles.stat}>
-          <span>Owned</span>
+          <span>Premium</span>
           <strong>{stats.owned}</strong>
         </div>
       </div>
