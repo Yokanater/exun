@@ -4,10 +4,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 60vh;
-  padding: 3.5rem 0;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
+  min-height: 70vh;
+
+
 }
 
 .copy {
@@ -27,14 +26,14 @@
 }
 
 .logoContainer {
-  margin-bottom: 1rem;
-  height: 123px; // Match the SVG viewBox height ratio
+  margin-bottom: 0.5rem;
+  height: 123px;
   display: flex;
   align-items: center;
   justify-content: center;
   
   @media (max-width: 768px) {
-    height: 82px; // Proportional to 200px width
+    height: 82px;
   }
 }
 
@@ -78,5 +77,26 @@
   flex-wrap: wrap;
   margin-top: 0.5rem;
   justify-content: center;
+}
+
+.title {
+  font-size: 3rem;
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--text-primary);
+  margin: 0;
+  
+  &::after {
+    display: none;
+  }
+  
+  @media (max-width: 768px) {
+    font-size: 2rem;
+  }
+}
+
+.highlight {
+  color: var(--accent-primary);
 }
 

@@ -7,7 +7,6 @@
   padding: 1.25rem 0;
   margin-bottom: 0rem;
   border-bottom: 1px solid var(--border);
-  text-transform: uppercase;
 }
 
 .logo {
@@ -17,13 +16,19 @@
   font-size: 1.5rem;
   font-weight: 800;
   font-family: var(--font-display);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  letter-spacing: 0.02em;
   color: var(--text-primary);
   
   svg {
-    color: #CC3F3F;
+    color: var(--accent-primary);
     flex-shrink: 0;
+  }
+  
+  span {
+    background: linear-gradient(90deg, var(--accent-primary) 0%, var(--text-primary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 }
 
@@ -38,16 +43,16 @@
   transition: border-color var(--transition), color var(--transition);
   font-size: 0.82rem;
   font-weight: 600;
-  color: var(--text-secondary);
-  letter-spacing: 0.1em;
+  color: var(--text-tertiary);
+  letter-spacing: 0.02em;
 }
 
 .link:hover {
-  color: var(--text-primary);
+  color: var(--text-secondary);
 }
 
 .active {
-  color: var(--text-primary);
+  color: var(--text-secondary);
   border-color: var(--accent-highlight);
 }
 
@@ -67,13 +72,13 @@
 .userName {
   font-size: 0.9375rem;
   font-weight: 500;
+  color: var(--text-tertiary);
 }
 
 .userRole {
   font-size: 0.75rem;
   color: var(--text-tertiary);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.02em;
 }
 
 .balance {
@@ -91,7 +96,7 @@
   border: 1px solid var(--border);
   font-size: 0.875rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.02em;
   transition: all var(--transition);
   white-space: nowrap;
   min-width: 110px;
@@ -99,20 +104,20 @@
 }
 
 .sessionBtn {
-  background: var(--text-primary);
+  background: var(--accent-primary);
   color: var(--bg-base);
-  border-color: var(--text-primary);
+  border-color: var(--accent-primary);
   
   &:hover {
     background: transparent;
-    color: var(--accent-highlight);
-    border-color: var(--accent-highlight);
+    color: var(--accent-primary);
+    border-color: var(--accent-primary);
   }
 }
 
 .sessionBtnSecondary {
   background: transparent;
-  color: var(--text-primary);
+  color: var(--text-tertiary);
   
   &:hover {
     color: var(--accent-highlight);
